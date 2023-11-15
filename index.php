@@ -3,63 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>查詢網頁</title>
+    <title>搜蒐甜點店</title>
     <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            margin-top: 20px;
+        .header{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            box-shadow: 10px 0px 10px lightgray;
         }
-
-        table, th, td {
-            border: 1px solid #ddd;
+        .menu{
+            width:50%;
+            display:flex;
+            justify-content:space-around;
+            padding:10px;
         }
-
-        th, td {
-            padding: 10px;
-            text-align: left;
+        .menu li{
+            list-style-type: none;
+            
+        }
+        .menu li:hover{
+            border-bottom:3px solid #F28599;
+        }
+        .menu a{
+            text-decoration:none;
+            color:#F2507B;
+            font-size:18px;
+            display:block;
+        }
+        .logo{
+            text-indent:101%; 
+            overflow:hidden; 
+            white-space:nowrap; 
+            background-image:url('./image/logo-2.png');
+            width:350px;
+            height:80px;
+            border-radius:10px;
+        }
+        .logo a{
+            display:block;
         }
     </style>
 </head>
 <body>
-
-    <h2>資料庫查詢結果</h2>
-
-    <?php
-        // 資料庫連接資訊
-        $servername = 'server_name';
-        $username = 'user_name';
-        $password = 'your_pwd';
-        $dbname = 'db_name';
-
-        // 建立資料庫連接
-        $conn = new mysqli($servername, $username, $password, $dbname);
-
-        // 檢查連接是否成功
-        if ($conn->connect_error) {
-            die("連接失敗: " . $conn->connect_error);
-        }
-
-        // 查詢資料
-        $sql = "SELECT * FROM dessert_shop";
-        $result = $conn->query($sql);
-
-        // 顯示查詢結果
-        
-        if ($result->num_rows > 0) {
-            echo "<table>";
-            echo "<tr><th>Name</th><th>Email</th><th>Seat</th><th>Phone</th><th>Website</th></tr>";
-            while($row = $result->fetch_assoc()) {
-                echo "<tr><td>" . $row["Shop_Name"] . "</td><td>" . $row["Shop_Email"] . "</td><td>" . $row["Shop_Seat"] . "</td><td>". $row["Shop_Phone"]."</td><td>" . $row["Shop_Website"]."</td></tr>";
-            }
-            echo "</table>";
-        } else {
-            echo "0 筆結果";
-        }
-        
-        // 關閉資料庫連接
-        $conn->close();
-    ?>
-
+    <div class="header">
+        <h1 class="logo"><a href="index.php">搜蒐甜點店</a></h1>
+        <ul class="menu">
+            <li><a href="select.php">select</a></li>
+            <li><a href="insert.php">insert</a></li>
+            <li><a href="update.php">update</a></li>
+            <li><a href="delete.php">delete</a></li>
+        </ul>
+    </div>
 </body>
 </html>
