@@ -30,7 +30,7 @@ require_once 'db.php';
         $searchTerm=array();
 
         // 獲取搜索條件
-        $searchTerm = $_GET['searchTerm'];
+        $searchTerm = isset($_GET['searchTerm']) ? $_GET['searchTerm'] : '';
 
         // 查詢資料
         $sql = "SELECT * FROM dessert_shop WHERE Shop_Name LIKE '%$searchTerm%'";
@@ -39,9 +39,16 @@ require_once 'db.php';
         // 顯示查詢結果
         if ($result->num_rows > 0) {
             echo "<table>";
-            echo "<tr><th>Name</th><th>Email</th><th>Seat</th><th>Phone</th><th>Website</th></tr>";
-            while($row = $result->fetch_assoc()) {
-                echo "<tr><td>" . $row["Shop_Name"] . "</td><td>" . $row["Shop_Email"] . "</td><td>" . $row["Shop_Seat"] . "</td><td>". $row["Shop_Phone"]."</td><td>" . $row["Shop_Website"]."</td></tr>";
+            echo "<tr><th>Name</th><th>Email</th><th>Seat</th><th>Phone</th><th>Website</th><th>Action</th></tr>";
+            while ($row = $result->fetch_assoc()) {
+                echo "<tr>";
+                echo "<td>" . $row['Shop_Name'] . "</td>";
+                echo "<td>" . $row['Shop_Email'] . "</td>";
+                echo "<td>" . $row['Shop_Seat'] . "</td>";
+                echo "<td>" . $row['Shop_Phone'] . "</td>";
+                echo "<td>" . $row['Shop_Website'] . "</td>";
+                echo "<td><a href='shop_info.php?shop_id=" . $row["Shop_ID"] . "'><button type='button'>詳細資訊</button></a></td>";
+                echo "</tr>";
             }
             echo "</table>";
         } else {
