@@ -27,10 +27,10 @@
 
     <?php
         // 資料庫連接資訊
-        $servername = 'localhost';
-        $username = 'root';
-        $password = 'aa0421626';
-        $dbname = 'search_collect';
+        $servername = 'server_name';
+        $username = 'user_name';
+        $password = 'your_pwd';
+        $dbname = 'db_name';
 
         // 建立資料庫連接
         $conn = new mysqli($servername, $username, $password, $dbname);
