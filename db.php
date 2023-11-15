@@ -1,8 +1,8 @@
 <?php
-    $servername = "localhost";
-    $username = "root";
-    $password = "aa0421626";
-    $dbname = 'search_collect';
+    $servername = "server_name";
+    $username = "username";
+    $password = "your_pwd";
+    $dbname = 'db_name';
 
     // Create connection
     $conn = new mysqli($servername, $username, $password, $dbname);
