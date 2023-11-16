@@ -39,9 +39,67 @@ if ($result->num_rows > 0) {
     echo "未找到相應的店家資訊";
 }
 
-// 關閉資料庫連接
-$conn->close();
 ?>
-<h2>評論</h2>
-<input type="submit">新增評論</input>
+<div class="comment">
+    <p>ping</p>
+    <form action="shop_info.php?shop_id=<?php echo $shopID?>" method="POST">
+    <input type="text" placeholder="寫下你的看法..." class="comment-content" name="comment_content">
+    <input type="number" class="comment-rating" name="comment_rating">
+    <input type="submit" value="新增評論">
+</form>
+
+<?php
+// Start or resume the session
+session_start();
+
+// Initialize the counter if it doesn't exist
+if (!isset($_SESSION['comment_counter'])) {
+    $_SESSION['comment_counter'] = 0;
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Check if the keys are set in the $_POST array
+    if (isset($_POST["comment_content"]) && isset($_POST["comment_rating"])) {
+        // Increment the counter
+        $_SESSION['comment_counter']++;
+
+        $com_content = $_POST["comment_content"];
+        $com_rating = $_POST["comment_rating"];
+        $com_date = date("Y-m-d");
+        $com_id = 'Com' . str_pad($_SESSION['comment_counter'], 7, '0', STR_PAD_LEFT);
+
+        $sql = "INSERT INTO comment (shop_id, com_id, com_date, com_content, com_title, com_rating) 
+                VALUES ('$shopID', '$com_id', '$com_date', '$com_content', '', '$com_rating')";
+
+        if ($conn->query($sql) === TRUE) {
+            echo "Comment added successfully";
+        } else {
+            echo "Error: " . $sql . "<br>" . $conn->error;
+        }
+    } else {
+        echo "One or more form fields are not set.";
+    }
+}
+?>
+
+</div>
+
+
+<?php
+    $shopID = isset($_GET['shop_id']) ? $_GET['shop_id'] : '';
+    $sql="SELECT * FROM comment WHERE Shop_ID='$shopID'";
+    $result=$conn->query($sql);
+    // 顯示查詢結果
+    if ($result->num_rows > 0 ) {
+        while ($row = $result->fetch_assoc()) {
+            echo "<p>" . $row["Com_Date"] . "</p>";
+            echo "<p><strong>內容:</strong> " . $row["Com_Content"] . "</p>";
+            echo "<p><strong>星等:</strong> " . $row["Com_Rating"] . "</p>";
+            echo "<hr>"; // Add a horizontal line between comments for better readability
+        }
+    } else {
+        echo "目前沒有評論資訊";
+    }
+    $conn->close();
+?>
 </body>
