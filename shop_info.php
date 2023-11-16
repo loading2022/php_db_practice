@@ -19,27 +19,43 @@ require_once 'db.php';
 </head>
 <body>
 <?php
-// 獲取 Shop_ID 參數
-$shopID = isset($_GET['shop_id']) ? $_GET['shop_id'] : '';
+    // 獲取 Shop_ID 參數
+    $shopID = isset($_GET['shop_id']) ? $_GET['shop_id'] : '';
 
-// 查詢資料
-$sql = "SELECT * FROM dessert_shop WHERE Shop_ID = '$shopID'";
-$result = $conn->query($sql);
+    // 查詢資料
+    $sql = "SELECT * FROM dessert_shop WHERE Shop_ID = '$shopID'";
+    $result = $conn->query($sql);
 
-// 顯示查詢結果
-if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc();
-    echo "<h2>店家詳細資訊</h2>";
-    echo "<p><strong>Name:</strong> " . $row["Shop_Name"] . "</p>";
-    echo "<p><strong>Email:</strong> " . $row["Shop_Email"] . "</p>";
-    echo "<p><strong>Seat:</strong> " . $row["Shop_Seat"] . "</p>";
-    echo "<p><strong>Phone:</strong> " . $row["Shop_Phone"] . "</p>";
-    echo "<p><strong>Website:</strong> " . $row["Shop_Website"] . "</p>";
-} else {
-    echo "未找到相應的店家資訊";
-}
+    // 顯示查詢結果
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        echo "<h2>店家詳細資訊</h2>";
+        echo "<p><strong>Name:</strong> " . $row["Shop_Name"] . "</p>";
+        echo "<p><strong>Email:</strong> " . $row["Shop_Email"] . "</p>";
+        echo "<p><strong>Seat:</strong> " . $row["Shop_Seat"] . "</p>";
+        echo "<p><strong>Phone:</strong> " . $row["Shop_Phone"] . "</p>";
+        echo "<p><strong>Website:</strong> " . $row["Shop_Website"] . "</p>";
 
+        // Add a form with a button to submit the data
+        echo "<form method='POST'>";
+        echo "<input type='submit' name='addToFavorites' value='加入我的最愛'>";
+        echo "</form>";
+
+        // Handle form submission
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['addToFavorites'])) {
+            $insertSQL = "INSERT INTO fav (shop_id, fav_id) VALUES ('$shopID', 'fav0000001')";
+
+            if ($conn->query($insertSQL) === TRUE) {
+                echo "加入我的最愛成功！";
+            } else {
+                echo "Error: " . $insertSQL . "<br>" . $conn->error;
+            }
+        }
+    } else {
+        echo "未找到相應的店家資訊";
+    }
 ?>
+
 <div class="comment">
     <p>ping</p>
     <form action="shop_info.php?shop_id=<?php echo $shopID?>" method="POST">
@@ -49,7 +65,6 @@ if ($result->num_rows > 0) {
 </form>
 
 <?php
-session_start();
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["comment_content"]) && isset($_POST["comment_rating"])) {
        
