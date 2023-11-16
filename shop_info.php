@@ -49,16 +49,7 @@ if ($result->num_rows > 0) {
 </form>
 
 <?php
-// Start or resume the session
 session_start();
-
-// Initialize the counter if it doesn't exist
-/*
-if (!isset($_SESSION['comment_counter'])) {
-    $_SESSION['comment_counter'] = 0;
-}
-*/
-$comment_counter=0;
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["comment_content"]) && isset($_POST["comment_rating"])) {
        
