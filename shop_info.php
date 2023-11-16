@@ -53,23 +53,30 @@ if ($result->num_rows > 0) {
 session_start();
 
 // Initialize the counter if it doesn't exist
+/*
 if (!isset($_SESSION['comment_counter'])) {
     $_SESSION['comment_counter'] = 0;
 }
-
+*/
+$comment_counter=0;
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Check if the keys are set in the $_POST array
     if (isset($_POST["comment_content"]) && isset($_POST["comment_rating"])) {
-        // Increment the counter
-        $_SESSION['comment_counter']++;
-
+       
         $com_content = $_POST["comment_content"];
         $com_rating = $_POST["comment_rating"];
         $com_date = date("Y-m-d");
-        $com_id = 'Com' . str_pad($_SESSION['comment_counter'], 7, '0', STR_PAD_LEFT);
-
-        $sql = "INSERT INTO comment (shop_id, com_id, com_date, com_content, com_title, com_rating) 
-                VALUES ('$shopID', '$com_id', '$com_date', '$com_content', '', '$com_rating')";
+        // Retrieve the current minimum com_id for the specified shop_id
+        $result = $conn->query("SELECT MAX(com_id) AS max_com_id FROM comment WHERE shop_id = '$shopID'");
+        $row = $result->fetch_assoc();
+        $maxComId = $row['max_com_id'];
+        if ($maxComId === null) {
+            $newComId = 'Com0000000';
+        }
+        else{
+            $newComId = 'Com' . str_pad((int)substr($maxComId, 3) + 1, 7, '0', STR_PAD_LEFT);
+        }
+        $sql = "INSERT INTO comment (shop_id,com_id,com_date, com_content,com_rating) 
+                VALUES ('$shopID', '$newComId','$com_date', '$com_content', '$com_rating')";
 
         if ($conn->query($sql) === TRUE) {
             echo "Comment added successfully";
